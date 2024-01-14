@@ -2,12 +2,27 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { v4 as uuidv4 } from "uuid";
 import { addBook } from "../../redux/books/actionCreators";
+import booksData from "../../data/books.json";
 import "./BookForm.css";
 
 const BookForm = () => {
   const [title, setTitle] = useState("");
   const [author, setAuthor] = useState("");
+  const [year, setYear] = useState("");
   const dispatch = useDispatch();
+
+  const handleAddRandomBook = () => {
+    const randomIndex = Math.floor(Math.random() * booksData.length);
+    const randomBook = booksData[randomIndex];
+
+    const randomBookWithId = {
+      ...randomBook,
+      id: uuidv4(),
+      isFavorite: false,
+    };
+
+    dispatch(addBook(randomBookWithId));
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -16,6 +31,8 @@ const BookForm = () => {
       const book = {
         title,
         author,
+        year,
+        isFavorite: false,
         id: uuidv4(),
       };
 
@@ -23,6 +40,7 @@ const BookForm = () => {
 
       setTitle("");
       setAuthor("");
+      setYear("");
     }
   };
 
@@ -31,7 +49,9 @@ const BookForm = () => {
       <h2>Add a New Book</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          <label htmlFor="title">Title: </label>
+          <label htmlFor="title">
+            Title<span>*</span>:{" "}
+          </label>
           <input
             type="text"
             id="title"
@@ -40,7 +60,9 @@ const BookForm = () => {
           />
         </div>
         <div>
-          <label htmlFor="author">Author: </label>
+          <label htmlFor="author">
+            Author<span>*</span>:{" "}
+          </label>
           <input
             type="text"
             id="author"
@@ -48,7 +70,19 @@ const BookForm = () => {
             onChange={(e) => setAuthor(e.target.value)}
           />
         </div>
+        <div>
+          <label htmlFor="year">Year: </label>
+          <input
+            type="text"
+            id="year"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+          />
+        </div>
         <button type="submit">Add Book</button>
+        <button type="button" onClick={handleAddRandomBook}>
+          Add Random
+        </button>
       </form>
     </div>
   );

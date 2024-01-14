@@ -9,6 +9,12 @@
     margin-bottom: 10px;
 }
 
+.book-form label span {
+    font-size: 12px;
+    color: red;
+    vertical-align: top;
+}
+
 .book-form input {
     width: 80%;
     padding: 8px;
